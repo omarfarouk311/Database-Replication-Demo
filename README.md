@@ -1,4 +1,4 @@
-This repository contains a demonstration of a PostgreSQL database cluster setup. The cluster consists of one master node and three replica nodes, with different configurations for synchronous and asynchronous replication. This setup is ideal for testing high availability and load balancing in a PostgreSQL environment.
+This repository contains a demonstration of a PostgreSQL database cluster setup. The cluster consists of one master node and three replica nodes, with different configurations for synchronous and asynchronous replication using WAL streaming method. This setup is ideal for testing high availability and load balancing in a PostgreSQL environment.
 
 ## Cluster Configuration
 
@@ -23,7 +23,7 @@ To manage the PostgreSQL cluster easily, two PowerShell scripts are provided:
   - This script starts the entire cluster, initializes the master node, and sets up the replicas according to the specified configurations.
   
 - **`down.ps1`**: 
-  - This script stops the cluster and performs cleanup operations to ensure a clean shutdown of all nodes.
+  - This script deletes all the cluster components and performs cleanup operations to ensure a clean shutdown of all nodes.
 
 ## Prerequisites
 
@@ -38,17 +38,29 @@ To manage the PostgreSQL cluster easily, two PowerShell scripts are provided:
    cd Database-Replication-Demo
    ```
    
-2. Create `.env` file that contains POSTGRES_PASSWORD=your_password entry.
+2. Create `.env` file that contains `POSTGRES_PASSWORD=your_password` entry.
 
 3. Run the startup.ps1 script to start the PostgreSQL cluster:
     ```powershell
     .\startup.ps1
     ```
+    Note that this script takes some time to execute, monitor the execution in the terminal to ensure the cluster is up and running before using it.
 
-4. To stop the cluster, execute the down.ps1 script:
+4. To stop the cluster:
+    ```bash
+    docker-compose stop
+    ```
+    
+5. To start the cluster again:
+    ```bash
+    docker-compose up -d --scale server=0
+    ```
+    
+6. To delete the cluster, execute the down.ps1 script:
     ```powershell
     .\down.ps1
     ```
+    
 ## Usage  
   Once the cluster is up and running, you can connect to the master node to perform write operations.
   Read operations can be performed on either of the synchronous replicas (standby1 or standby2).

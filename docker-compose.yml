@@ -1,9 +1,10 @@
 services:
   master:
     image: postgres:latest
+    container_name: master
     volumes:
       - ./master/data:/var/lib/postgresql/data
-      - ./create_replication_user.sql:/docker-entrypoint-initdb.d/create_replication_user.sql
+      - ./scripts/create_replication_user.sql:/docker-entrypoint-initdb.d/create_replication_user.sql
     networks:
       - db-net
     env_file:
@@ -11,8 +12,10 @@ services:
 
   standby1:
     image: postgres:latest
+    container_name: standby1
     volumes:
       - ./standby1/data:/var/lib/postgresql/data
+      - ./scripts/create_standby_signal.sh:/docker-entrypoint-initdb.d/create_standby_signal.sh
     networks:
       - db-net
     depends_on:
@@ -22,8 +25,10 @@ services:
 
   standby2:
     image: postgres:latest
+    container_name: standby2
     volumes:
       - ./standby2/data:/var/lib/postgresql/data
+      - ./scripts/create_standby_signal.sh:/docker-entrypoint-initdb.d/create_standby_signal.sh
     networks:
       - db-net
     depends_on:
@@ -33,8 +38,10 @@ services:
 
   standby3:
     image: postgres:latest
+    container_name: standby3
     volumes:
       - ./standby3/data:/var/lib/postgresql/data
+      - ./scripts/create_standby_signal.sh:/docker-entrypoint-initdb.d/create_standby_signal.sh
     networks:
       - db-net
     depends_on:
@@ -44,6 +51,7 @@ services:
 
 networks:
   db-net:
+    name: db-net
     driver: bridge
     ipam:
       config:

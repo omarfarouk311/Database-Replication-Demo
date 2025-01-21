@@ -16,10 +16,6 @@ foreach ($standby in $standbys) {
     # Copy standby configs
     Copy-Item -Path ".\configs\$standby\*" -Destination $standbyDataDir -Force
     Write-Host "Standby configs copied to $standbyDataDir"
-
-    # Create standby.signal
-    New-Item -Path "$standbyDataDir\standby.signal" -ItemType File -Force
-    Write-Host "standby.signal created in $standbyDataDir"
 }
 
 Write-Host "All standbys have been updated."

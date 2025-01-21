@@ -22,8 +22,8 @@ To manage the PostgreSQL cluster easily, two PowerShell scripts are provided:
 - **`startup.ps1`**: 
   - This script starts the entire cluster, initializes the master node, and sets up the replicas according to the specified configurations.
   
-- **`down.ps1`**: 
-  - This script deletes all the cluster components and performs cleanup operations to ensure a clean shutdown of all nodes.
+- **`delete_data.ps1`**: 
+  - This script deletes data folder for each node.
 
 ## Prerequisites
 
@@ -40,25 +40,32 @@ To manage the PostgreSQL cluster easily, two PowerShell scripts are provided:
    
 2. Create `.env` file that contains `POSTGRES_PASSWORD=your_password` entry.
 
-3. Run the startup.ps1 script to start the PostgreSQL cluster:
+3. Change the password in `create_replication_user.sql` script, and also change it in the connection string for each standby `postgresql.conf` file in standby configs folders by searching for `primary_conninfo` in it. 
+
+4. Run the startup.ps1 script to start the PostgreSQL cluster:
     ```powershell
     .\startup.ps1
     ```
     Note that this script takes some time to execute, monitor the execution in the terminal to ensure the cluster is up and running before using it.
 
-4. To stop the cluster:
-    ```bash
+5. To stop the cluster:
+    ```shell
     docker-compose stop
     ```
     
-5. To start the cluster again:
-    ```bash
-    docker-compose up -d --scale server=0
+6. To start the cluster again:
+    ```shell
+    docker-compose start
+    ```
+
+7. To delete the cluster containers and network
+    ```shell
+    docker-compose down
     ```
     
-6. To delete the cluster, execute the down.ps1 script:
+8. To delete the data of all the cluster nodes, execute the delete_data.ps1 script:
     ```powershell
-    .\down.ps1
+    .\delete_data.ps1
     ```
     
 ## Usage  
